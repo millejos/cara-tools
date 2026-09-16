@@ -1,0 +1,33 @@
+#schedule-container { min-width: 760px; border: 1px solid #aaa; }
+   .schedule-container .lm-schedule { height: auto; max-height: none; overflow: visible; border: 0; }
+   .schedule-container table { font-size: 14px; }
+   .schedule-container thead td { font-size: 16px; padding: 14px 4px; background: white; border-right: 1px solid #bbb; }
+   .schedule-container thead td:first-child { width: 76px; }
+   .schedule-container thead td::before { font-size: 16px; text-transform: none; padding: 0; }
+   .schedule-container thead td::after { border-color: #aaa; }
+   .schedule-container tbody tr { height: 2px !important; }
+   .schedule-container tbody td { border-right: 1px solid #bbb; }
+   .schedule-container tbody tr.half-hour td { border-top: 1px solid #e3e5e7; }
+    /* One row per minute: quarter-hour guides only in the day columns. */
+   .schedule-container tbody tr:nth-child(15n + 1):not(.lm-schedule-hour) td:not(:first-child) {
+      border-top: 1px dotted #c7cdd3;
+    }
+   .schedule-container tbody tr.lm-schedule-hour td { border-top: 1px solid #aeb4ba; }
+   .schedule-container .lm-schedule-index { font-size: 12px; margin: 2px 0 0; }
+   .schedule-container .lm-schedule-item {
+      width: calc(100% - 6px) !important; margin-left: 3px !important;
+      border: 1px solid #999; border-radius: 9px; color: #111 !important;
+      display: flex; flex-direction: column; flex-wrap: nowrap; align-items: center;
+      justify-content: center; gap: 3px; padding: 3px; text-align: center;
+      opacity: 1; background-image: none; overflow: hidden;
+    }
+   .schedule-container .lm-schedule-item::before {
+      content: attr(data-title); white-space: pre-line; height: auto;
+      font-size: 15px; font-weight: 500; line-height: 1.1; margin: 0; flex-shrink: 0;
+    }
+   .schedule-container .lm-schedule-item::after {
+      content: attr(data-time-label); font-size: 11px; line-height: 1.1; margin: 0;
+    }
+   .schedule-container .lm-schedule-item:focus-visible { outline: 3px solid #235ea7; outline-offset: 1px; }
+    .end-time { font-size: 12px; padding: 5px 0; width: 76px; text-align: center; }
+    .notes { margin-top: 12px; }

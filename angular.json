@@ -15,9 +15,15 @@
             "outputPath": "dist/cara-tools",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
-            "styles": ["src/styles.scss"]
+            "styles": [
+              "node_modules/@calendarjs/ce/dist/style.css",
+              "src/styles.scss",
+              "src/app/features/calendar/calendar.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -33,8 +39,12 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": { "buildTarget": "cara-tools:build:production" },
-            "development": { "buildTarget": "cara-tools:build:development" }
+            "production": {
+              "buildTarget": "cara-tools:build:production"
+            },
+            "development": {
+              "buildTarget": "cara-tools:build:development"
+            }
           },
           "defaultConfiguration": "development"
         }
