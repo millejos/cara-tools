@@ -118,3 +118,11 @@
   overflow-x: auto;
   padding-bottom: 12px;
 }
+
+.schedule-container .lm-schedule thead td[data-selected='true'] {
+  background-color: inherit;
+}
+
+.schedule-container .lm-schedule thead td[data-selected='true']::after {
+  border-bottom-color: var(--lm-border-color, #ddd);
+}
