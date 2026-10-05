@@ -1,4 +1,8 @@
-<div class="schedule-scroll">
+<div class="schedule-toolbar">
+  <button type="button" (click)="openEditor()">Add event</button>
+  <span>Select an event to edit it.</span>
+</div>
+<app-event-editor (saved)="saveEvent($event)" /><div class="schedule-scroll">
   <div
     #scheduleContainer
     class="schedule-container"

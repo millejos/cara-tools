@@ -126,3 +126,7 @@
 .schedule-container .lm-schedule thead td[data-selected='true']::after {
   border-bottom-color: var(--lm-border-color, #ddd);
 }
+.schedule-toolbar { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.schedule-toolbar button { font: inherit; padding: 8px 16px; cursor: pointer; }
+.schedule-toolbar span { color: #555; font-size: 14px; }
+.schedule-container .lm-schedule-item { cursor: pointer; }

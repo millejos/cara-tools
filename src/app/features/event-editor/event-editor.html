@@ -1,0 +1,29 @@
+<dialog #dialog aria-labelledby="event-editor-heading">
+    <form (submit)="submit($event)">
+        <h2 id="event-editor-heading">{{ editing ? 'Edit event' : 'Add event' }}</h2>
+        <label>Title <textarea name="title" [value]="draft.title" rows="2" required autofocus></textarea></label>
+        <label>Day of week
+            <select name="weekday" [value]="draft.weekday">
+                @for (day of days; track $index) { <option [value]="$index + 1">{{ day }}</option> }
+            </select>
+        </label>
+        <div class="times">
+            <label>Start time <input name="start" type="time" [value]="draft.start" min="08:00" max="15:00" step="60"
+                    required /></label>
+            <label>End time <input name="end" type="time" [value]="draft.end" min="08:00" max="15:00" step="60"
+                    required /></label>
+        </div>
+        <label>Color <input name="color" type="color" [value]="draft.color" /></label>
+        <div class="swatches" aria-label="Suggested colors">
+            @for (color of colors; track color) {
+            <button type="button" [style.background]="color" [attr.aria-label]="'Use color ' + color"
+                (click)="chooseColor(color)" [attr.aria-pressed]="draft.color === color"></button>
+            }
+        </div>
+        @if (error) { <p role="alert">{{ error }}</p> }
+        <div class="actions">
+            <button type="button" (click)="dialog.close()">Cancel</button>
+            <button type="submit">Save event</button>
+        </div>
+    </form>
+</dialog>

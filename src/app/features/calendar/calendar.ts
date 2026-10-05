@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { EventEditor } from '../event-editor/event-editor';
 import calendarjs from '@calendarjs/ce';
 import { LibraryEvent, libraryEvents } from '../../schedule-data';
 
@@ -19,7 +20,7 @@ type ScheduleInstance = ReturnType<typeof calendarjs.Schedule>;
 
 @Component({
   selector: 'app-calendar',
-  imports: [],
+  imports: [EventEditor],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })
@@ -27,13 +28,39 @@ export class Calendar implements OnInit, AfterViewInit {
   @ViewChild('scheduleContainer', { static: true })
   private scheduleContainer!: ElementRef<HTMLDivElement>;
 
+  @ViewChild(EventEditor) private editor!: EventEditor;
+  private schedule!: ScheduleInstance;
+  private events = libraryEvents.map(event => ({ ...event }));
+
+  openEditor(event?: LibraryEvent): void { this.editor.open(event); }
+
+  saveEvent(event: LibraryEvent): void {
+    const others = this.events.filter(item => item.guid !== event.guid);
+    if (!this.isValidEvent(event, new Set(others.map(item => item.guid)))) {
+      this.editor.reject('Use a weekday and an increasing time range within 08:00–15:00.');
+      return;
+    }
+    if (others.some(item => item.weekday === event.weekday && item.start < event.end && event.start < item.end)) {
+      this.editor.reject('This time overlaps another event on the same day.');
+      return;
+    }
+    const index = this.events.findIndex(item => item.guid === event.guid);
+    if (index < 0) this.events.push(event);
+    else this.events[index] = event;
+    this.schedule.setData(this.events.map(item => ({ ...item, readonly: true })));
+    this.formatHeaders(this.scheduleContainer.nativeElement);
+    this.formatTimeRows(this.scheduleContainer.nativeElement);
+    this.formatEvents(this.schedule);
+    this.editor.close();
+  }
+
   ngOnInit(): void {
     this.validateEvents();
   }
 
   ngAfterViewInit(): void {
     const container = this.scheduleContainer.nativeElement;
-    const scheduleData = libraryEvents.map((event) => ({
+    const scheduleData = this.events.map((event) => ({
       ...event,
       readonly: true,
     }));
@@ -49,6 +76,7 @@ export class Calendar implements OnInit, AfterViewInit {
       onbeforechangeevent: () => false,
     });
 
+    this.schedule = schedule;
     this.formatHeaders(container);
     this.formatTimeRows(container);
     this.formatEvents(schedule);
@@ -57,7 +85,7 @@ export class Calendar implements OnInit, AfterViewInit {
   private validateEvents(): void {
     const eventIds = new Set<string>();
 
-    for (const event of libraryEvents) {
+    for (const event of this.events) {
       if (!this.isValidEvent(event, eventIds)) {
         throw new Error(
           `Check event ${event.guid || '(missing guid)'}: use a unique guid, ` +
@@ -119,7 +147,7 @@ export class Calendar implements OnInit, AfterViewInit {
   }
 
   private formatEvents(schedule: ScheduleInstance): void {
-    for (const event of libraryEvents) {
+    for (const event of this.events) {
       const element = schedule.getEvent(event.guid);
 
       if (!element) {
@@ -135,7 +163,15 @@ export class Calendar implements OnInit, AfterViewInit {
 
       element.style.height = `${duration * PIXELS_PER_MINUTE}px`;
       element.dataset['timeLabel'] = timeLabel;
-      element.setAttribute('role', 'img');
+      element.setAttribute('role', 'button');
+      element.setAttribute('aria-haspopup', 'dialog');
+      element.onclick = () => this.openEditor(event);
+      element.onkeydown = (keyEvent) => {
+        if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+          keyEvent.preventDefault();
+          this.openEditor(event);
+        }
+      };
       element.setAttribute('aria-label', accessibleLabel);
       element.tabIndex = 0;
       element.title = accessibleLabel;

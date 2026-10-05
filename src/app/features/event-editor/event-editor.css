@@ -1,0 +1,88 @@
+dialog {
+    border: 1px solid #bbb;
+    border-radius: 12px;
+    padding: 24px;
+    width: min(400px, calc(100vw - 64px));
+}
+
+dialog::backdrop {
+    background: rgb(0 0 0 / 35%);
+}
+
+h2 {
+    margin: 0 0 20px;
+    font-size: 22px;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+input,
+textarea,
+select,
+button {
+    font: inherit;
+}
+
+input,
+textarea,
+select {
+    padding: 8px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    min-width: 0;
+}
+
+input[type=color] {
+    width: 64px;
+    height: 40px;
+    padding: 3px;
+}
+
+.times {
+    display: flex;
+    gap: 16px;
+}
+
+.times label {
+    flex: 1;
+    min-width: 0;
+}
+
+.swatches,
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.swatches button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #888;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.swatches button[aria-pressed=true] {
+    outline: 2px solid #235ea7;
+    outline-offset: 2px;
+}
+
+.actions {
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.actions button {
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+p {
+    color: #a02020;
+}
